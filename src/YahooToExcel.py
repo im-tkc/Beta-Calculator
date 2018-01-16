@@ -6,7 +6,6 @@ import urllib.request
 from datetime import datetime, timedelta
 import time
 from openpyxl import Workbook
-import numpy
 import PricePoint
 
 class YahooToExcel(object):
@@ -149,7 +148,8 @@ class YahooToExcel(object):
         
                                 
         workbook.save(output_file)
-        return workbook    
+        return workbook
+        
     @staticmethod
     def get_json(filename):
         raw_data = None
