@@ -144,7 +144,7 @@ class YahooToExcel(object):
                                 market_ticker, market_start_change_len, market_end_change_len, 
                                 market_ticker, market_start_change_len, market_end_change_len
                             )
-        worksheet["B2"] = "=B1 * 2 / 3"
+        worksheet["B2"] = "=(B1 * 2/3) + (1/3 * 1)"
         
                                 
         workbook.save(output_file)
