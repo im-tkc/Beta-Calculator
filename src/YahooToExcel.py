@@ -126,6 +126,31 @@ class YahooToExcel(object):
                 pricePoints.append(pp)
     
     @staticmethod
+    def calculate_beta(workbook, output_file):
+        sheets_list = workbook.sheetnames
+        company_ticker = sheets_list[0]
+        market_ticker = sheets_list[1]
+        company_worksheet = workbook[company_ticker]
+        market_worksheet = workbook[market_ticker]
+        
+        company_change_len = len(company_worksheet['H'])
+        market_end_change_len = len(market_worksheet['H'])
+        market_start_change_len = len(market_worksheet['H']) - company_change_len + 3 # include header and baseline
+        
+        worksheet = workbook.create_sheet("beta result", 0)
+        worksheet["A1"] = "Regression beta"
+        worksheet["A2"] = "Adjusted beta"
+        worksheet["B1"] = "=_xlfn.COVARIANCE.S('{0}'!H3:H{1}, '{2}'!H{3}:H{4})/_xlfn.VAR.S('{5}'!H{6}:H{7})".format(
+                                company_ticker, company_change_len, 
+                                market_ticker, market_start_change_len, market_end_change_len, 
+                                market_ticker, market_start_change_len, market_end_change_len
+                            )
+        worksheet["B2"] = "=B1 * 2 / 3"
+        
+                                
+        workbook.save(output_file)
+        return workbook    
+    @staticmethod
     def get_json(filename):
         raw_data = None
         with open(filename, 'rb') as file:

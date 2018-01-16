@@ -2,6 +2,7 @@
 
 import sys
 from YahooToExcel import YahooToExcel
+from openpyxl import load_workbook
 import argparse
 
 def export(ticker, result, workbook=None):
@@ -29,6 +30,10 @@ def main(argv):
     result = parser.parse_args()
     workbook = export(result.index_ticker, result)
     workbook = export(result.company_ticker, result, workbook)
+    
+    output_file = "{0}.xlsx".format(result.output)
+    workbook = load_workbook(output_file)
+    YahooToExcel().calculate_beta(workbook, output_file)
     
 if __name__ == '__main__':
     main(sys.argv)
