@@ -90,7 +90,7 @@ class YahooToExcel(object):
                 worksheet["E{0}".format(i+2+offset)] = close_price
                 worksheet["F{0}".format(i+2+offset)] = adj_close_price
                 worksheet["G{0}".format(i+2+offset)] = volume
-                worksheet["H{0}".format(i+2+offset)] = percent_change
+                worksheet["H{0}".format(i+2+offset)] = float(percent_change)
 
         workbook.save(output_file)
         return workbook
@@ -136,15 +136,15 @@ class YahooToExcel(object):
         market_end_change_len = len(market_worksheet['H'])
         market_start_change_len = len(market_worksheet['H']) - company_change_len + 3 # include header and baseline
         
-        worksheet = workbook.create_sheet("beta result", 0)
-        worksheet["A1"] = "Regression beta"
-        worksheet["A2"] = "Adjusted beta"
-        worksheet["B1"] = "=_xlfn.COVARIANCE.S('{0}'!H3:H{1}, '{2}'!H{3}:H{4})/_xlfn.VAR.S('{5}'!H{6}:H{7})".format(
+        worksheet = workbook.create_sheet("beta_result", 0)
+        worksheet["D1"] = "Regression beta"
+        worksheet["D2"] = "Adjusted beta"
+        worksheet["E1"] = "=_xlfn.COVARIANCE.S('{0}'!H3:H{1}, '{2}'!H{3}:H{4})/_xlfn.VAR.S('{5}'!H{6}:H{7})".format(
                                 company_ticker, company_change_len, 
                                 market_ticker, market_start_change_len, market_end_change_len, 
                                 market_ticker, market_start_change_len, market_end_change_len
                             )
-        worksheet["B2"] = "=(B1 * 2/3) + (1/3 * 1)"
+        worksheet["E2"] = "=(E1 * 2/3) + (1/3 * 1)"
         
                                 
         workbook.save(output_file)
