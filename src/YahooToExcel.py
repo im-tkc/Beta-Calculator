@@ -13,6 +13,7 @@ class YahooToExcel(object):
     def download(ticker, end_time, frequency, filename):
         url = "https://query1.finance.yahoo.com/v8/finance/chart/{0}?symbol={1}&period1=-{2}&period2={3}&interval={4}&includePrePost=true&events=div|split|earn&corsDomain=finance.yahoo.com".format(ticker, ticker, end_time, end_time, frequency)
         urllib.request.urlretrieve(url, filename)
+        
     
     @staticmethod
     def to_datetime(unixtime):

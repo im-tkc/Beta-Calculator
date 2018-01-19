@@ -12,13 +12,12 @@ from openpyxl.chart import (
     Series,
 )
 
-def export(ticker, result, workbook=None):
-    filename = "{0}.json".format(result.output)
-    output_file = "{0}.xlsx".format(result.output)
-    frequency = result.frequency # "1d","5d","1mo","3mo","6mo","1y","2y","5y","10y","max"
+def export(ticker, frequency, filename, workbook=None): # 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
+    json_file = "{0}.json".format(filename)
+    output_file = "{0}.xlsx".format(filename)
     
     y2e = YahooToExcel()
-    workbook = y2e.run(filename, ticker, frequency, output_file, workbook)
+    workbook = y2e.run(json_file, ticker, frequency, output_file, workbook)
 
     return workbook
     
@@ -73,29 +72,41 @@ def plot_graph(workbook, output_file, index_ticker, company_ticker):
     beta_worksheet.add_chart(chart, "F5")
     workbook.save(output_file)
         
-
-
 def main(argv):
     if len(sys.argv) == 1:
         print("Beta calculator")
-        print("    Usage: run.py -m <index_ticker> -c <company ticker> -f <frequency> -o <output file name>")
+        print("    Shortcut tips: run.py -m <index_ticker> -c <company ticker> -f <frequency> -o <output file name>")
+        
+        index_ticker = input("Market ticker: ")
+        company_ticker = input("Company ticker: ")
+        frequency = input("Frequency (1d, 5d, 1wk, 1mo, 3mo): ")
+        filename = input("Output filename: ")
+        
+    elif len(sys.argv) == 9:
+        parser = argparse.ArgumentParser(description="Beta calculator")
+        parser.add_argument('-m', action='store', dest="index_ticker")
+        parser.add_argument('-s', action='store', dest="company_ticker")
+        parser.add_argument('-f', action='store', dest="frequency")
+        parser.add_argument('-o', action='store', dest="output")
+        
+        result = parser.parse_args()
+        index_ticker = result.index_ticker
+        company_ticker = result.company_ticker
+        frequency = result.frequency
+        filename = result.output
+    else:
+        print("Beta calculator")
+        print("    Shortcut tips: run.py -m <index_ticker> -c <company ticker> -f <frequency> -o <output file name>")
         sys.exit(1)
+        
+    workbook = export(index_ticker, frequency, filename)
+    workbook = export(company_ticker, frequency, filename, workbook)
     
-    parser = argparse.ArgumentParser(description="Beta calculator")
-    parser.add_argument('-m', action='store', dest="index_ticker")
-    parser.add_argument('-s', action='store', dest="company_ticker")
-    parser.add_argument('-f', action='store', dest="frequency")
-    parser.add_argument('-o', action='store', dest="output")
-    
-    result = parser.parse_args()
-    workbook = export(result.index_ticker, result)
-    workbook = export(result.company_ticker, result, workbook)
-    
-    output_file = "{0}.xlsx".format(result.output)
+    output_file = "{0}.xlsx".format(filename)
     workbook = load_workbook(output_file)
     workbook = YahooToExcel().calculate_beta(workbook, output_file)
-    workbook = copy_data(workbook, output_file, result.index_ticker, result.company_ticker)
-    plot_graph(workbook, output_file, result.index_ticker, result.company_ticker)
+    workbook = copy_data(workbook, output_file, index_ticker, company_ticker)
+    plot_graph(workbook, output_file, index_ticker, company_ticker)
     
     os.remove("{0}.json".format(result.output))
     
