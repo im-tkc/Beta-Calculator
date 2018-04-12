@@ -2,3 +2,5 @@ Lib/
 Build/
 src/__pycache__/*
 Scripts/
+Include/
+tcl/

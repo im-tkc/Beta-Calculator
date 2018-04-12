@@ -77,7 +77,7 @@ def main(argv):
     
     if len(sys.argv) == 1:
         print("Beta calculator")
-        print("    Shortcut tips: run.py -m <index_ticker from Yahoo Finance> -c <company ticker from Yahoo Finance> -f <frequency> -o <output file name>")
+        print("    Shortcut tips: run.py -m <index_ticker from Yahoo Finance> -s <company ticker from Yahoo Finance> -f <frequency> -o <output file name>")
         
         index_ticker = input("Market ticker: ")
         company_ticker = input("Company ticker: ")
@@ -98,7 +98,7 @@ def main(argv):
         filename = result.output
     else:
         print("Beta calculator")
-        print("    Shortcut tips: run.py -m <index_ticker> -c <company ticker> -f <frequency> -o <output file name>")
+        print("    Shortcut tips: run.py -m <index_ticker from Yahoo Finance> -s <company ticker from Yahoo Finance> -f <frequency> -o <output file name>")
         sys.exit(1)
         
     workbook = export(index_ticker, frequency, filename)
