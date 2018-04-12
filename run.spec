@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['src\\run.py'],
-             pathex=['src/', 'C:\\Users\\user\\Desktop\\beta_calculator'],
+             pathex=['src/', 'C:\\Users\\user\\Documents\\Personal Coding Projects\\PC Projects\\beta_cal'],
              binaries=[],
              datas=[],
              hiddenimports=['YahooToExcel', 'PricePoint'],

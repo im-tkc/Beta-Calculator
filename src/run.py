@@ -73,9 +73,11 @@ def plot_graph(workbook, output_file, index_ticker, company_ticker):
     workbook.save(output_file)
         
 def main(argv):
+    filename = None
+    
     if len(sys.argv) == 1:
         print("Beta calculator")
-        print("    Shortcut tips: run.py -m <index_ticker> -c <company ticker> -f <frequency> -o <output file name>")
+        print("    Shortcut tips: run.py -m <index_ticker from Yahoo Finance> -c <company ticker from Yahoo Finance> -f <frequency> -o <output file name>")
         
         index_ticker = input("Market ticker: ")
         company_ticker = input("Company ticker: ")
@@ -108,7 +110,7 @@ def main(argv):
     workbook = copy_data(workbook, output_file, index_ticker, company_ticker)
     plot_graph(workbook, output_file, index_ticker, company_ticker)
     
-    os.remove("{0}.json".format(result.output))
+    os.remove("{0}.json".format(filename))
     
 if __name__ == '__main__':
     main(sys.argv)
